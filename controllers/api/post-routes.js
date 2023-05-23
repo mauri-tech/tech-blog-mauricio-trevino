@@ -2,27 +2,24 @@ const router = require('express').Router();
 const { Post } = require('../../models/');
 const withAuth = require('../../utils/auth');
 
-// Create a new post
+// CREATE POST
 router.post('/', withAuth, async (req, res) => {
   const body = req.body;
-  console.log(body);
-
+    console.log(body);
   try {
-    // Create a new post with the provided body and associated userId
     const newPost = await Post.create({ ...body, userId: req.session.userId });
-    console.log("Here is the new post: ", newPost);
+    console.log("Here is the new post: ",  newPost);
     res.json(newPost);
-  } catch (err) {
-    console.log('IT FAILED!', err);
+     } catch (err) {
+       console.log('IT FAILED!', err);
     res.status(500).json(err);
   }
 });
 
-// Update a post
+// UPDATE POST
 router.put('/:id', withAuth, async (req, res) => {
   try {
     console.log('here is the req.body', req.body);
-    // Update the post with the provided body
     const [affectedRows] = await Post.update(req.body, {
       where: {
         id: req.params.id,
@@ -39,10 +36,9 @@ router.put('/:id', withAuth, async (req, res) => {
   }
 });
 
-// Delete a post
+// DELETE POST
 router.delete('/:id', withAuth, async (req, res) => {
   try {
-    // Delete the post with the provided id
     const [affectedRows] = Post.destroy({
       where: {
         id: req.params.id,
